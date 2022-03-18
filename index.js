@@ -33,7 +33,7 @@ app.use('/users',usersRoutes);
 app.use('/products',productRoutes);
 app.use('/orders',orderRoutes);
 
-//await db.sync({ force: true });
+await db.sync({ force: true });
 console.log("All models were synchronized successfully.");
 
 app.get('/', (req,res) => {res.send('Hello from homepage. ');});
