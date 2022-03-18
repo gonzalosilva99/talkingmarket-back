@@ -4,7 +4,6 @@ import usersRoutes from './routes/users.js';
 import { db } from './talkingmarketdb.js';
 import productRoutes from './routes/product.js';
 import orderRoutes from './routes/order.js';
-import { Sequelize  } from 'sequelize';
 import dotenv from 'dotenv';
 import {  Product } from './models/product.js';
 import { User } from './models/user.js';
@@ -13,7 +12,6 @@ import { UnitsProduct } from './models/unitsproduct.js';
 
 //Db connection and config
 const app = express();
-const PORT = 5000;
 
 db.authenticate().then(()=> {
     console.log('Database connected...');
@@ -37,4 +35,4 @@ await db.sync({ force: true });
 console.log("All models were synchronized successfully.");
 
 app.get('/', (req,res) => {res.send('Hello from homepage. ');});
-app.listen(PORT, () => console.log(`Server running on port: http://localhost:${PORT}`));
+app.listen(process.env.PORT || 5000);
