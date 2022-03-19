@@ -27,11 +27,18 @@ Order.belongsToMany(Product, { through: UnitsProduct });
 
 //Routes and config
 dotenv.config();
+app.use(function (req,res,next){
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+})
 app.use('/users',usersRoutes);
 app.use('/products',productRoutes);
 app.use('/orders',orderRoutes);
 
-await db.sync({ force: true });
+//await db.sync({ force: true });
 console.log("All models were synchronized successfully.");
 
 app.get('/', (req,res) => {res.send('Hello from homepage. ');});
