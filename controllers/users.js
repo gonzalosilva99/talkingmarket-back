@@ -6,7 +6,7 @@ import { User } from '../models/user.js'
 export var userController = { 
     loginUser: loginUser,
     registerUser: registerUser,
-    getOrdersOfUser: getOrdersOfUser 
+    getOrdersOfUser: getOrdersOfUser
 }
 
 async function loginUser(req,res){
@@ -48,7 +48,7 @@ async function loginUser(req,res){
 async function registerUser(req,res){
   try {
     // Get user input
-    const { firstname, lastname, email, password, image, birthday } = req.body;
+    const { firstname, lastname, email, password, image, birthday, isOwner } = req.body;
 
     // Validate user input
     if (!(email && password && firstname && lastname && birthday)) {
@@ -74,6 +74,7 @@ async function registerUser(req,res){
       image,
       birthday,// sanitize: convert email to lowercase
       password: encryptedPassword,
+      isOwner
     });
 
     // Create token

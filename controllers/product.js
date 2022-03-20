@@ -20,7 +20,7 @@ function addProduct(req,res){
 }
 
 function findProductById(req,res){
-    productDao.findById(res.params.id).
+    productDao.findById(req.params.id).
         then((data) => {
             res.send(data);
         })

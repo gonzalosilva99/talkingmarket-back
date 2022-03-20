@@ -6,7 +6,8 @@ import { db } from '../talkingmarketdb.js';
 
 export var orderDao = {
     getOrdersFromUser: getOrdersFromUser,
-    createOrderForUser: createOrderForUser
+    createOrderForUser: createOrderForUser,
+    getDailyProfit: getDailyProfit
 }
 
 async function getOrdersFromUser(user){
@@ -30,4 +31,28 @@ async function createOrderForUser(user, order){
         })));
         return await Order.findOne( {where: { id: neworderaux.id }, include: [{model: Product, through: {attributes: ['units']} }]});
     })
+}
+
+async function getDailyProfit(date){ 
+    let orders = await Order.findAll({where: db.where(db.fn('date', db.col('order.createdAt')), '=', date), include: [{model: Product, through: {attributes: ['units']}}]});
+    let daily_profit = [];
+    let totalProfit = 0;
+    if (orders){ 
+        await Promise.all(orders.map( async order => {
+            await Promise.all(order.products.map(async unitprod => {
+                const product = await Product.findByPk(unitprod.id);
+                const profit = unitprod.UnitsProducts.units * ( product.price - product.cost); 
+                let index = daily_profit.findIndex(dp => dp.product.id === product.id); 
+                if(index != -1){
+                    daily_profit[index].profit= daily_profit[index].profit + profit;
+                }
+                else{ 
+                    daily_profit.push({product: product, profit: profit});
+                }
+                totalProfit += profit;
+            }));
+        }));
+    }
+    daily_profit.push({total: totalProfit});
+    return daily_profit;
 }

@@ -3,7 +3,8 @@ import { UserDao } from '../dao/user.dao.js';
 
 export var orderController = { 
     getOrdersOfLoggedUser: getOrdersOfLoggedUser,
-    createOrderForUser: createOrderForUser
+    createOrderForUser: createOrderForUser,
+    getDailyProfit: getDailyProfit
 }
 
 async function getOrdersOfLoggedUser(req,res){
@@ -18,7 +19,7 @@ async function getOrdersOfLoggedUser(req,res){
                 res.send(error);
             });
     }catch(err){
-        console.log(err);
+        res.status(500).send(err);
     };
     //get orders of user 
     //return orders
@@ -37,6 +38,22 @@ async function createOrderForUser(req,res){
                 res.status(500).send(error);
             });
     }catch(err){
-        console.log(err);
+        res.status(500).send(err);
+    };
+}
+
+
+async function getDailyProfit(req,res){
+    try{
+        const date = req.query.date; 
+        orderDao.getDailyProfit(date).
+            then((order) => {
+                res.send(order);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }catch(err){
+        res.status(500).send(err);
     };
 }

@@ -27,7 +27,11 @@ export const User = db.define('user', {
     },
     token: {
          type: Sequelize.STRING
-    }
+    },
+    isOwner: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+     }
 },
 {
     freezeTableName: true,
